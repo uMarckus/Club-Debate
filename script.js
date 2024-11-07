@@ -1,30 +1,39 @@
 // script.js
 
 // Configuración de Supabase
-const SUPABASE_URL = 'https://xsswlvpoxczrrxwzchob.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhzc3dsdnBveGN6cnJ4d3pjaG9iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzA2OTU1MTEsImV4cCI6MjA0NjI3MTUxMX0._h0u9MfymU81SDX9-gPPy9_vb-zSx4Aei5Dpog1tCq0';
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+import { createClient } from '@supabase/supabase-js'
+const supabaseUrl = 'https://xsswlvpoxczrrxwzchob.supabase.co'
+const supabaseKey = process.env.SUPABASE_KEY
+const supabase = createClient(supabaseUrl, supabaseKey)
 
 // Función para cargar los puntajes de los miembros
 async function cargarPuntajes() {
     try {
-        const { data, error } = await supabase
-            .from('miembros') // Reemplaza 'miembros' con el nombre de tu tabla
-            .select('nombre_completo, puntaje'); // Cambia 'nombre' por 'nombre_completo'
-  
+        // Realizando el join entre miembro y puntaje
+        let { data: miembro, error } = await supabase
+            .from('miembro') // Tabla miembro
+            .select(`
+                nombre_estudiante, 
+                p_apellido, 
+                s_apellido, 
+                puntaje:puntaje  // Obtenemos puntaje desde la tabla puntaje usando el alias
+            `)
+            .join('puntaje', 'miembro.id_puntaje', 'puntaje.id_puntaje'); // Join entre las tablas
+
         if (error) throw error;
-  
+
         const tbody = document.querySelector("#score-table tbody");
         tbody.innerHTML = ''; // Limpiar la tabla antes de llenarla
   
+        // Iterar sobre los datos y agregar las filas a la tabla
         data.forEach(member => {
             const row = document.createElement("tr");
   
-            // Crear celdas de nombre completo y puntaje
+            // Crear celdas para el nombre completo y el puntaje
             const nombreCell = document.createElement("td");
-            nombreCell.textContent = member.nombre_completo; // Mostrar el nombre completo
+            nombreCell.textContent = `${member.nombre_estudiante} ${member.p_apellido} ${member.s_apellido}`; // Nombre completo
             const puntajeCell = document.createElement("td");
-            puntajeCell.textContent = member.puntaje;
+            puntajeCell.textContent = member.puntaje; // Puntaje
   
             row.appendChild(nombreCell);
             row.appendChild(puntajeCell);
