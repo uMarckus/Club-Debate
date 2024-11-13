@@ -1,29 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Puntajes de Miembros</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>Ranking Club de Debate</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-  <h1>Ranking Club de Debate.</h1>
+  <img src="DWWD.jpg" alt="">
+  <h1>Ranking Club de Debate</h1>
+  
   <div class="table-container">
     <table id="score-table">
       <thead>
         <tr>
-          <th>Nombre</th>
+          <th>Nombre Completo</th>
           <th>Puntaje</th>
         </tr>
       </thead>
       <tbody>
-        <!-- Aquí se insertarán las filas dinámicamente -->
+        <!-- Las filas de la tabla se agregarán dinámicamente aquí -->
       </tbody>
     </table>
   </div>
 
+  <!-- Vincula Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-  <script src="script.js"></script>
+  <!-- Vincula tu archivo JavaScript -->
+  <script type="module" src="script.js"></script>
 </body>
 </html>
